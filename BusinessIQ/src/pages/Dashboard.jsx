@@ -35,7 +35,7 @@ function Dashboard() {
 
         <div className="card">
           <h3>Top Region</h3>
-          <p>Punjab generated the highest revenue.</p>
+          <p>Punjab is the highest revenue-generating region.</p>
         </div>
       </div>
     </div>
