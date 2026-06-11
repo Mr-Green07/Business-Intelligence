@@ -2,7 +2,8 @@ import { useState } from "react";
 import { NavLink } from "react-router-dom";
 import {
   Menu,
-  X,
+  ChevronLeft,
+  ChevronRight,
   LayoutDashboard,
   BarChart3,
   Package,
@@ -19,11 +20,11 @@ function Sidebar() {
   const menuItems = [
     { name: "Dashboard", path: "/", icon: LayoutDashboard },
     { name: "Sales Summary", path: "/sales", icon: BarChart3 },
-    { name: "Top Products", path: "/products", icon: Package },
     { name: "Insights", path: "/insights", icon: Lightbulb },
     { name: "Recommendations", path: "/recommendations", icon: ClipboardList },
     { name: "Regions", path: "/regions", icon: MapPinned },
     { name: "Customers", path: "/customers", icon: Users },
+    {name:"Data Upload", path:"/data-upload", icon:Menu},
     { name: "Settings", path: "/settings", icon: Settings },
   ];
 
@@ -31,7 +32,7 @@ function Sidebar() {
     <div
       style={{
         width: open ? "250px" : "70px",
-        height: "100vh",
+        height: "200vh",
         background: "#0f172a",
         color: "white",
         transition: "0.3s",
@@ -47,18 +48,24 @@ function Sidebar() {
           marginBottom: "30px",
         }}
       >
-        {open && <h2>DecisionPilot</h2>}
+
 
         <button
           onClick={() => setOpen(!open)}
           style={{
-            background: "none",
-            border: "none",
-            color: "white",
+          background: "rgba(255,255,255,0.06)",
+            border: "1px solid rgba(255,255,255,0.12)",
+            color: "#e5e7eb",
             cursor: "pointer",
+            borderRadius: "12px",
+            padding: "8px",
+            boxShadow: "0 0 0 rgba(59,130,246,0)",
+            transition: "0.2s", 
+          
+
           }}
         >
-          {open ? <X size={22} /> : <Menu size={22} />}
+          {open ? <ChevronLeft size={22} /> : <ChevronRight size={22} />}
         </button>
       </div>
 
