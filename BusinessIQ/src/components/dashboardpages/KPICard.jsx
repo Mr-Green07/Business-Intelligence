@@ -14,6 +14,7 @@ function KPICard({ title, value, growth }) {
           margin: 0,
           color: "#6b7280",
           fontSize: "14px",
+          fontWeight: "600",
         }}
       >
         {title}

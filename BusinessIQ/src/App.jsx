@@ -1,3 +1,4 @@
+
 import { Routes, Route } from "react-router-dom";
 
 import Navbar from "./components/Navbar";
@@ -14,9 +15,11 @@ function App() {
   return (
     <>
       <Navbar />
+ 
 
       <div style={{ display: "flex" }}>
         <Sidebar />
+
 
         <Routes>
           <Route path="/" element={<Dashboard />} />
@@ -24,6 +27,7 @@ function App() {
           <Route path="/insights" element={<Insights />} />
           <Route path="/regions" element={<Regions />} />
         </Routes>
+
       </div>
     </>
   );
