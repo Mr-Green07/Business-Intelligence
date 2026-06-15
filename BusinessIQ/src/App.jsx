@@ -9,7 +9,7 @@ import SalesSummary from "./pages/SalesSummary";
 import Insights from "./pages/Insights";
 import Regions from "./pages/Regions";
 
-import "./App.css";
+
 
 function App() {
   return (
