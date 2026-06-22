@@ -1,7 +1,16 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../context/AuthContext";
 
 function Navbar() {
+  const navigate = useNavigate();
+  const { user, logout } = useAuth();
   const [showProfile, setShowProfile] = useState(false);
+
+  const handleLogout = () => {
+    logout();
+    navigate("/login", { replace: true });
+  };
 
   return (
     <nav
@@ -17,15 +26,17 @@ function Navbar() {
       }}
     >
       <div style={{ flex: 1 }}>
-        <h2 style={{ margin: 0, fontSize: "24px", color: "#111827" }}>DecisionPilot</h2>
+        <h2 style={{ margin: 0, fontSize: "24px", color: "#111827" }}>
+          DecisionPilot
+        </h2>
       </div>
 
       {/* Right Section */}
       <div
         style={{
-        display: "flex",
+          display: "flex",
           alignItems: "center",
-        justifyContent: "flex-start",
+          justifyContent: "flex-start",
           gap: "20px",
         }}
       >
@@ -81,9 +92,10 @@ function Navbar() {
               alignItems: "center",
               justifyContent: "center",
               fontWeight: "bold",
+              fontSize: "16px",
             }}
           >
-            S
+            {user?.name?.[0]?.toUpperCase() ?? "U"}
           </div>
 
           <div>
@@ -93,7 +105,7 @@ function Navbar() {
                 fontWeight: "600",
               }}
             >
-              Simran Yadav
+              {user?.name ?? "User"}
             </div>
 
             <div
@@ -102,7 +114,7 @@ function Navbar() {
                 color: "#6b7280",
               }}
             >
-              Business Analyst
+              {user?.role ?? "Analyst"}
             </div>
           </div>
         </div>
@@ -126,14 +138,14 @@ function Navbar() {
         >
           {/* Profile Header */}
           <div>
-            <h3 style={{ margin: 0 }}>👤 Simran Yadav</h3>
+            <h3 style={{ margin: 0 }}>👤 {user?.name ?? "User"}</h3>
             <p
               style={{
                 color: "#6b7280",
                 margin: "5px 0",
               }}
             >
-              Business Analyst
+              {user?.email ?? ""}
             </p>
           </div>
 
@@ -168,17 +180,11 @@ function Navbar() {
           <div>
             <h4>📈 Business Alerts</h4>
 
-            <p style={{ color: "#dc2626" }}>
-              North Region sales down 15%
-            </p>
+            <p style={{ color: "#dc2626" }}>North Region sales down 15%</p>
 
-            <p style={{ color: "#f59e0b" }}>
-              Product A concentration risk
-            </p>
+            <p style={{ color: "#f59e0b" }}>Product A concentration risk</p>
 
-            <p style={{ color: "#16a34a" }}>
-              Customer retention up 8%
-            </p>
+            <p style={{ color: "#16a34a" }}>Customer retention up 8%</p>
           </div>
 
           <hr />
@@ -202,6 +208,7 @@ function Navbar() {
                 color: "white",
                 border: "none",
               }}
+              onClick={handleLogout}
             >
               🚪 Logout
             </button>
