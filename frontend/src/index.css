@@ -1,0 +1,86 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply antialiased text-gray-900 bg-gray-50;
+  }
+}
+
+/* Custom scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-300 rounded-full hover:bg-gray-400;
+}
+
+/* Map hover transitions */
+.india-map-container path {
+  transition: fill 0.2s ease, opacity 0.2s ease;
+}
+
+/* ==================== STATE COLOR DEFINITIONS ==================== */
+.india-map-container path {
+  transition: fill 0.3s ease, opacity 0.3s ease, filter 0.3s ease !important;
+  cursor: pointer !important;
+}
+
+/* 🌊 South Zone (Deep Blues) */
+.india-map-container path[id="IN-AP"] { fill: #0284c7 !important; }
+.india-map-container path[id="IN-KA"] { fill: #0369a1 !important; }
+.india-map-container path[id="IN-KL"] { fill: #075985 !important; }
+.india-map-container path[id="IN-TN"] { fill: #0c4a6e !important; }
+.india-map-container path[id="IN-TG"] { fill: #0ea5e9 !important; }
+.india-map-container path[id="IN-AN"] { fill: #38bdf8 !important; }
+.india-map-container path[id="IN-LD"] { fill: #7dd3fc !important; }
+.india-map-container path[id="IN-PY"] { fill: #bae6fd !important; }
+
+/* 🔥 West Zone (Warm Oranges & Ambers) */
+.india-map-container path[id="IN-MH"] { fill: #ea580c !important; }
+.india-map-container path[id="IN-GJ"] { fill: #f97316 !important; }
+.india-map-container path[id="IN-GA"] { fill: #ffedd5 !important; }
+.india-map-container path[id="IN-RJ"] { fill: #d97706 !important; }
+.india-map-container path[id="IN-DN"] { fill: #ffad66 !important; }
+
+/* 🔮 North Zone (Royal Purples & Lavenders) */
+.india-map-container path[id="IN-DL"] { fill: #7c3aed !important; }
+.india-map-container path[id="IN-PB"] { fill: #8b5cf6 !important; }
+.india-map-container path[id="IN-HR"] { fill: #a78bfa !important; }
+.india-map-container path[id="IN-HP"] { fill: #c4b5fd !important; }
+.india-map-container path[id="IN-UP"] { fill: #6d28d9 !important; }
+.india-map-container path[id="IN-UT"] { fill: #4c1d95 !important; }
+.india-map-container path[id="IN-JK"] { fill: #ddd6fe !important; }
+.india-map-container path[id="IN-LA"] { fill: #ede9fe !important; }
+.india-map-container path[id="IN-CH"] { fill: #e9d5ff !important; }
+
+/* 🍃 East & Northeast Zone (Emeralds, Greens & Teals) */
+.india-map-container path[id="IN-WB"] { fill: #059669 !important; }
+.india-map-container path[id="IN-OR"] { fill: #047857 !important; }
+.india-map-container path[id="IN-BR"] { fill: #065f46 !important; }
+.india-map-container path[id="IN-JH"] { fill: #0ea5e9 !important; }
+.india-map-container path[id="IN-SK"] { fill: #34d399 !important; }
+.india-map-container path[id="IN-AS"] { fill: #10b981 !important; }
+.india-map-container path[id="IN-AR"] { fill: #059669 !important; }
+.india-map-container path[id="IN-MN"] { fill: #14b8a6 !important; }
+.india-map-container path[id="IN-ML"] { fill: #2dd4bf !important; }
+.india-map-container path[id="IN-MZ"] { fill: #a7f3d0 !important; }
+.india-map-container path[id="IN-NL"] { fill: #6ee7b7 !important; }
+.india-map-container path[id="IN-TR"] { fill: #99f6e4 !important; }
+
+/* ✨ Central Zone (Golden Yellows) */
+.india-map-container path[id="IN-MP"] { fill: #ca8a04 !important; }
+.india-map-container path[id="IN-CT"] { fill: #eab308 !important; }
+
+/* Hover Brightness Animation */
+.india-map-container path:hover {
+  filter: brightness(1.25) contrast(1.1) !important;
+  opacity: 0.95 !important;
+  stroke: #ffffff !important;
+  stroke-width: 2px !important;
+}
