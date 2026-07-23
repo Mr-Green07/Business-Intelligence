@@ -241,6 +241,24 @@ app.get('/api/dashboard/summary', authenticateToken, async (req, res) => {
 
 
 // ==========================================
+// Sales Options Filters Endpoint (Dynamic Category and Product listing)
+// ==========================================
+app.get('/api/sales/filters', authenticateToken, async (req, res) => {
+  try {
+    const categories = await allQuery('SELECT DISTINCT category FROM sales_data ORDER BY category ASC');
+    const states = await allQuery('SELECT DISTINCT state FROM sales_data ORDER BY state ASC');
+    const products = await allQuery('SELECT DISTINCT product_name FROM sales_data ORDER BY product_name ASC');
+    res.json({
+      categories: categories.map(c => c.category),
+      states: states.map(s => s.state),
+      products: products.map(p => p.product_name)
+    });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// ==========================================
 // 3. Sales Service Endpoints
 // ==========================================
 
@@ -1001,7 +1019,7 @@ app.post('/api/upload', authenticateToken, upload.single('file'), async (req, re
   "Lakshadweep",
   "Puducherry"
 ];
-      const validCategories = ['Electronics', 'Furniture', 'Clothing'];
+      
 
       let successCount = 0;
       let lineIndex = 1;
@@ -1038,8 +1056,8 @@ app.post('/api/upload', authenticateToken, upload.single('file'), async (req, re
           if (!state) {
             throw new Error(`Row ${lineIndex + 1}: State "${rawState}" is not recognized as a valid Indian State or UT.`);
           }
-          if (!category || !validCategories.includes(category)) {
-            throw new Error(`Row ${lineIndex + 1}: Category "${category}" is invalid. Must be Electronics, Furniture, or Clothing.`);
+          if (!category || category.trim().length === 0) {
+            throw new Error(`Row ${lineIndex + 1}: Category string is empty or invalid.`);
           }
           if (isNaN(revenue) || revenue <= 0) {
             throw new Error(`Row ${lineIndex + 1}: Revenue must be a positive number.`);
@@ -1222,8 +1240,34 @@ app.get('/api/users/activity', authenticateToken, async (req, res) => {
 });
 
 
+// ==========================================
+// API Root & Health Checks
+// ==========================================
+app.get('/api', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'BusinessIQ Enterprise BI API is fully operational!',
+    version: '1.0.0',
+    database: 'connected'
+  });
+});
+
+app.get('/api/', (req, res) => {
+  res.json({
+    status: 'success',
+    message: 'BusinessIQ Enterprise BI API is fully operational!',
+    version: '1.0.0',
+    database: 'connected'
+  });
+});
+
+// Catch-all API 404 handler to guarantee we always return JSON for missing API routes
+app.use('/api/*path', (req, res) => {
+  res.status(404).json({ error: `API endpoint ${req.originalUrl} not found` });
+});
+
 // Serve React frontend built files in production
-const frontendBuildPath = path.join(__dirname, 'dist');
+const frontendBuildPath = path.join(__dirname, '../frontend/dist');
 if (fs.existsSync(frontendBuildPath)) {
   app.use(express.static(frontendBuildPath));
   app.get('/*path', (req, res, next) => {

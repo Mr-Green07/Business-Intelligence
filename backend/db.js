@@ -59,7 +59,7 @@ const initializeDatabase = async () => {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       date TEXT NOT NULL, -- YYYY-MM-DD
       state TEXT NOT NULL,
-      category TEXT CHECK(category IN ('Electronics', 'Furniture', 'Clothing')) NOT NULL,
+      category TEXT NOT NULL,
       product_name TEXT NOT NULL,
       revenue REAL NOT NULL, -- in INR (Lakhs)
       orders INTEGER NOT NULL,
