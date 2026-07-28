@@ -1,0 +1,42 @@
+{
+  "version": 3,
+  "skills": {
+    "find-skills": {
+      "source": "vercel-labs/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/vercel-labs/skills.git",
+      "skillPath": "skills/find-skills/SKILL.md",
+      "skillFolderHash": "eb6a23305aea6e340d14b9de3766e721f9f4861b",
+      "installedAt": "2026-07-07T14:19:22.761Z",
+      "updatedAt": "2026-07-07T14:19:22.761Z"
+    },
+    "rag-blueprint": {
+      "source": "NVIDIA/skills",
+      "sourceType": "github",
+      "sourceUrl": "https://github.com/NVIDIA/skills.git",
+      "skillPath": "skills/rag-blueprint/SKILL.md",
+      "skillFolderHash": "503fc54816bdcf899828335b083daa85995c7d75",
+      "installedAt": "2026-07-23T19:22:57.954Z",
+      "updatedAt": "2026-07-23T19:22:57.954Z"
+    }
+  },
+  "dismissed": {
+    "findSkillsPrompt": true
+  },
+  "lastSelectedAgents": [
+    "amp",
+    "antigravity",
+    "antigravity-cli",
+    "cline",
+    "codex",
+    "cursor",
+    "deepagents",
+    "gemini-cli",
+    "github-copilot",
+    "kimi-code-cli",
+    "opencode",
+    "warp",
+    "zed",
+    "aider-desk"
+  ]
+}
