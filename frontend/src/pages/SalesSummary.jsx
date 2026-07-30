@@ -23,13 +23,24 @@ export default function SalesSummary() {
   const [selectedCategory, setSelectedCategory] = useState('');
   const [showFilters, setShowFilters] = useState(false);
 
-  const statesList = [
-    'Maharashtra', 'Karnataka', 'Tamil Nadu', 'Gujarat', 'Uttar Pradesh',
-    'Delhi', 'West Bengal', 'Rajasthan', 'Punjab', 'Haryana',
-    'Telangana', 'Kerala', 'Andhra Pradesh'
-  ];
+  // Dynamic filter lists loaded from database
+  const [statesList, setStatesList] = useState([]);
+  const [categoriesList, setCategoriesList] = useState([]);
 
-  const categoriesList = ['Electronics', 'Furniture', 'Clothing'];
+  // Fetch filter dropdown options dynamically from database
+  useEffect(() => {
+    fetch('/api/sales/filters', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setStatesList(data.states || []);
+          setCategoriesList(data.categories || []);
+        }
+      })
+      .catch(err => console.error('Error fetching filter lists:', err));
+  }, [token]);
 
   // Fetch sales records
   const fetchSalesRecords = () => {

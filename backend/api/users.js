@@ -4,6 +4,10 @@ const { allQuery } = require('../db');
 const { authenticateToken } = require('../middleware/auth');
 
 router.get('/activity', authenticateToken, async (req, res) => {
+  if (req.user.role.toLowerCase() !== 'admin') {
+    return res.status(403).json({ error: 'Access denied. Audit logs are restricted to administrators.' });
+  }
+
   try {
     const rows = await allQuery(`
       SELECT ua.id, ua.action, ua.details, ua.timestamp, u.name as user_name, u.role as user_role

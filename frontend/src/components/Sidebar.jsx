@@ -22,7 +22,7 @@ export default function Sidebar({ open, setOpen }) {
     { name: 'Regional Analytics', path: '/regions', icon: Map },
     { name: 'Insights & AI', path: '/insights', icon: Lightbulb },
     { name: 'Customer Analytics', path: '/customers', icon: Users },
-    { name: 'Bulk Data Upload', path: '/data-upload', icon: UploadCloud },
+    ...(user?.role?.toLowerCase() === 'admin' ? [{ name: 'Bulk Data Upload', path: '/data-upload', icon: UploadCloud }] : []),
     { name: 'Settings', path: '/settings', icon: SettingsIcon },
   ];
 

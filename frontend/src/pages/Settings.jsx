@@ -43,18 +43,22 @@ export default function Settings() {
       .catch(err => console.error('Error fetching settings:', err));
 
     // Fetch user activity logs
-    fetch('/api/users/activity', {
-      headers: { Authorization: `Bearer ${token}` }
-    })
-      .then(res => res.json())
-      .then(data => {
-        setActivities(data || []);
-        setLoadingLogs(false);
+    if (user?.role?.toLowerCase() === 'admin') {
+      fetch('/api/users/activity', {
+        headers: { Authorization: `Bearer ${token}` }
       })
-      .catch(err => {
-        console.error('Error fetching activity logs:', err);
-        setLoadingLogs(false);
-      });
+        .then(res => res.json())
+        .then(data => {
+          setActivities(Array.isArray(data) ? data : []);
+          setLoadingLogs(false);
+        })
+        .catch(err => {
+          console.error('Error fetching logs:', err);
+          setLoadingLogs(false);
+        });
+    } else {
+      setLoadingLogs(false);
+    }
   }, [token]);
 
   const handleThemeChange = (newTheme) => {
@@ -267,33 +271,41 @@ export default function Settings() {
           </div>
 
           {/* Detailed chron history activities */}
-          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col h-[350px]">
-            <h3 className="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
-              <History className="w-4 h-4 text-slate-400" />
-              Chronological Audit Log
-            </h3>
+          {user?.role?.toLowerCase() === 'admin' && (
+            <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex flex-col h-[350px]">
+              <h3 className="text-xs font-bold text-slate-800 dark:text-white uppercase tracking-wider mb-4 flex items-center gap-1.5">
+                <History className="w-4 h-4 text-slate-400" />
+                Chronological Audit Log
+              </h3>
 
-            {loadingLogs ? (
-              <div className="h-full bg-slate-100 animate-pulse rounded-lg"></div>
-            ) : (
-              <div className="flex-1 overflow-y-auto divide-y divide-slate-50 dark:divide-slate-800/40 pr-1">
-                {activities.map((act) => (
-                  <div key={act.id} className="py-3 text-xs flex gap-2.5 items-start">
-                    <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0 mt-1.5"></span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-slate-800 dark:text-slate-200 leading-tight">
-                        <strong className="font-bold text-slate-900 dark:text-white">{act.user_name}</strong>: {act.action}
-                      </p>
-                      <p className="text-[10px] text-slate-400 leading-relaxed truncate mt-0.5">{act.details}</p>
-                      <span className="text-[9px] text-slate-400 mt-1 block">
-                        {new Date(act.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {new Date(act.timestamp).toLocaleDateString([], { dateStyle: 'short' })}
-                      </span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </div>
+              {loadingLogs ? (
+                <div className="h-full bg-slate-100 animate-pulse rounded-lg"></div>
+              ) : (
+                <div className="flex-1 overflow-y-auto divide-y divide-slate-50 dark:divide-slate-800/40 pr-1">
+                  {activities.length === 0 ? (
+                    <p className="text-xs text-slate-400 dark:text-slate-500 italic text-center py-6">
+                      No activity logs recorded yet.
+                    </p>
+                  ) : (
+                    activities.map((act) => (
+                      <div key={act.id} className="py-3 text-xs flex gap-2.5 items-start">
+                        <span className="w-1.5 h-1.5 rounded-full bg-sky-500 shrink-0 mt-1.5"></span>
+                        <div className="min-w-0 flex-1">
+                          <p className="text-slate-800 dark:text-slate-200 leading-tight">
+                            <strong className="font-bold text-slate-900 dark:text-white">{act.user_name}</strong>: {act.action}
+                          </p>
+                          <p className="text-[10px] text-slate-400 leading-relaxed truncate mt-0.5">{act.details}</p>
+                          <span className="text-[9px] text-slate-400 mt-1 block">
+                            {new Date(act.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })} • {new Date(act.timestamp).toLocaleDateString([], { dateStyle: 'short' })}
+                          </span>
+                        </div>
+                      </div>
+                    ))
+                  )}
+                </div>
+              )}
+            </div>
+          )}
 
         </div>
 

@@ -9,7 +9,8 @@ import {
   Clock, 
   UserCheck, 
   ArrowRight,
-  TrendingUp
+  TrendingUp,
+  Lock
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -21,20 +22,24 @@ export default function Dashboard() {
 
   useEffect(() => {
     // Fetch summary highlights and activities in parallel
-    Promise.all([
-      fetch('/api/dashboard/summary', { headers: { Authorization: `Bearer ${token}` } }).then(res => res.json()),
-      fetch('/api/users/activity', { headers: { Authorization: `Bearer ${token}` } }).then(res => res.json())
-    ])
+    const fetchSummary = fetch('/api/dashboard/summary', { headers: { Authorization: `Bearer ${token}` } }).then(res => res.json());
+    
+    let fetchActivity = Promise.resolve([]);
+    if (user?.role?.toLowerCase() === 'admin') {
+      fetchActivity = fetch('/api/users/activity', { headers: { Authorization: `Bearer ${token}` } }).then(res => res.json());
+    }
+
+    Promise.all([fetchSummary, fetchActivity])
       .then(([summaryData, activityData]) => {
         setSummary(summaryData);
-        setActivity(activityData.slice(0, 5)); // show top 5 only
+        setActivity(Array.isArray(activityData) ? activityData.slice(0, 5) : []); // show top 5 only
         setLoading(false);
       })
       .catch(err => {
         console.error('Error fetching dashboard summary:', err);
         setLoading(false);
       });
-  }, [token]);
+  }, [token, user]);
 
   // Greeting helper
   const getGreeting = () => {
@@ -74,7 +79,7 @@ export default function Dashboard() {
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         
         {/* Core Highlights Cards */}
-        <div className="lg:col-span-2 space-y-4 flex flex-col justify-between">
+        <div className={`space-y-4 flex flex-col justify-between ${user?.role?.toLowerCase() === 'admin' ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
           <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm flex-1">
             <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-1.5">
               <Award className="w-4 h-4 text-sky-500" />
@@ -142,20 +147,20 @@ export default function Dashboard() {
         </div>
 
         {/* Recent Activity Log */}
-        <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
-          <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-1.5">
-            <Clock className="w-4 h-4 text-sky-500" />
-            Audit Log & User Activity
-          </h3>
-
-          {loading ? (
-            <div className="animate-pulse space-y-4">
-              {[...Array(3)].map((_, i) => (
-                <div key={i} className="h-10 bg-slate-100 dark:bg-slate-800 rounded"></div>
-              ))}
-            </div>
-          ) : (
-            <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1">
+        {user?.role?.toLowerCase() === 'admin' && (
+          <div className="bg-white dark:bg-slate-900 border border-slate-100 dark:border-slate-800 rounded-2xl p-6 shadow-sm">
+            <h3 className="text-sm font-bold text-slate-800 dark:text-white mb-6 flex items-center gap-1.5">
+              <Clock className="w-4 h-4 text-sky-500" />
+              Audit Log & User Activity
+            </h3>
+            {loading ? (
+              <div className="animate-pulse space-y-4">
+                {[...Array(3)].map((_, i) => (
+                  <div key={i} className="h-10 bg-slate-100 dark:bg-slate-800 rounded"></div>
+                ))}
+              </div>
+            ) : (
+              <div className="space-y-4 max-h-[300px] overflow-y-auto pr-1">
               {activity.length === 0 ? (
                 <p className="text-xs text-slate-400 dark:text-slate-500 italic text-center py-6">
                   No activity logs recorded yet.
@@ -181,6 +186,7 @@ export default function Dashboard() {
             </div>
           )}
         </div>
+        )}
 
       </div>
     </div>

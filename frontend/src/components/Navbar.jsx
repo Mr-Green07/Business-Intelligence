@@ -49,7 +49,7 @@ export default function Navbar({ sidebarOpen, setSidebarOpen }) {
       <div className="flex items-center gap-3">
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 focus:outline-none cursor-pointer"
+          className="lg:hidden rounded-lg p-1.5 text-slate-500 hover:bg-slate-100 dark:text-slate-400 dark:hover:bg-slate-800 focus:outline-none cursor-pointer"
         >
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />

@@ -34,11 +34,21 @@ export default function Customers() {
   const [loadingStats, setLoadingStats] = useState(true);
   const [error, setError] = useState('');
 
-  const statesList = [
-    'Maharashtra', 'Karnataka', 'Tamil Nadu', 'Gujarat', 'Uttar Pradesh',
-    'Delhi', 'West Bengal', 'Rajasthan', 'Punjab', 'Haryana',
-    'Telangana', 'Kerala', 'Andhra Pradesh'
-  ];
+  const [statesList, setStatesList] = useState([]);
+
+  // Fetch filter dropdown options dynamically from database
+  useEffect(() => {
+    fetch('/api/sales/filters', {
+      headers: { Authorization: `Bearer ${token}` }
+    })
+      .then(res => res.json())
+      .then(data => {
+        if (data) {
+          setStatesList(data.states || []);
+        }
+      })
+      .catch(err => console.error('Error fetching customer states list:', err));
+  }, [token]);
 
   // Fetch list
   const fetchCustomerList = () => {

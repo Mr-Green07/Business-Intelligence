@@ -114,18 +114,31 @@ router.post('/', authenticateToken, upload.single('file'), async (req, res) => {
         throw new Error('CSV is empty or missing headers');
       }
 
-      const headers = lines[0].toLowerCase().split(',').map(h => h.trim());
-      const requiredHeaders = ['date', 'state', 'category', 'product_name', 'revenue', 'orders', 'quantity'];
-      
-      const missing = requiredHeaders.filter(h => !headers.includes(h));
-      if (missing.length > 0) {
-        throw new Error(`Missing required CSV headers: ${missing.join(', ')}`);
-      }
-
+      const rawHeaders = lines[0].split(',').map(h => h.trim());
       const headerIndexes = {};
-      headers.forEach((h, i) => {
-        headerIndexes[h] = i;
+      const requiredHeaders = ['date', 'state', 'category', 'product_name', 'revenue', 'orders', 'quantity'];
+
+      rawHeaders.forEach((h, i) => {
+        const clean = h.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const mappings = {
+          'date': 'date', 'dt': 'date', 'timestamp': 'date',
+          'state': 'state', 'region': 'state', 'st': 'state', 'province': 'state', 'location': 'state',
+          'category': 'category', 'cat': 'category', 'type': 'category', 'department': 'category',
+          'productname': 'product_name', 'product': 'product_name', 'item': 'product_name', 'name': 'product_name',
+          'revenue': 'revenue', 'sales': 'revenue', 'amount': 'revenue', 'amt': 'revenue', 'total': 'revenue', 'price': 'revenue',
+          'orders': 'orders', 'ordercount': 'orders', 'transactions': 'orders', 'txns': 'orders',
+          'quantity': 'quantity', 'qty': 'quantity', 'units': 'quantity', 'count': 'quantity'
+        };
+        const mapped = mappings[clean];
+        if (mapped) {
+          headerIndexes[mapped] = i;
+        }
       });
+      
+      const missing = requiredHeaders.filter(h => headerIndexes[h] === undefined);
+      if (missing.length > 0) {
+        throw new Error(`Missing required CSV columns (or recognized variations of): ${missing.join(', ')}`);
+      }
 
       let successCount = 0;
       let lineIndex = 1;
